@@ -24,6 +24,8 @@ def predict(img):
   predictions = model.predict(x)
 
   # Return the top prediction (modify as needed)
+  # Check classname below
+  # https://deeplearning.cms.waikato.ac.nz/user-guide/class-maps/IMAGENET/
   return predictions[0].argmax(), predictions[0].max()
 
 @app.post("/predict")
