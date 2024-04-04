@@ -14,12 +14,11 @@ model = load_model('app/model/MobileNetv2_model.keras')
 # Define the prediction function (replace with your actual logic)
 def predict(img):
   # Preprocess the image (resize, normalize etc.)
-  # img = image.load_img(img, target_size=(224, 224))  # Adjust based on model input size
   img = np.uint8(tf.image.resize(tf.io.decode_image(img), (224, 224),
                                  method=tf.image.ResizeMethod.BILINEAR))
+  img = img / 255 * 2 - 1
   x = image.img_to_array(img)
   x = np.expand_dims(x, axis=0)  # Add batch dimension
-  # x = preprocess_input(x)  # Assuming you have a preprocess_input function
 
   # Make prediction
   predictions = model.predict(x)
