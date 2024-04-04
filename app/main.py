@@ -2,6 +2,9 @@ from fastapi import FastAPI, File, UploadFile
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.models import load_model
 import tensorflow as tf
+import numpy as np
+from PIL import Image
+import io
 print(tf.__version__)
 app = FastAPI()
 
@@ -11,15 +14,18 @@ model = load_model('app/model/MobileNetv2_model.keras')
 # Define the prediction function (replace with your actual logic)
 def predict(img):
   # Preprocess the image (resize, normalize etc.)
-  img = image.load_img(img, target_size=(224, 224))  # Adjust based on model input size
+  img = np.uint8(tf.image.resize(tf.io.decode_image(img), (224, 224),
+                                 method=tf.image.ResizeMethod.BILINEAR))
+  img = img / 255 * 2 - 1
   x = image.img_to_array(img)
   x = np.expand_dims(x, axis=0)  # Add batch dimension
-  x = preprocess_input(x)  # Assuming you have a preprocess_input function
 
   # Make prediction
   predictions = model.predict(x)
 
   # Return the top prediction (modify as needed)
+  # Check classname below
+  # https://deeplearning.cms.waikato.ac.nz/user-guide/class-maps/IMAGENET/
   return predictions[0].argmax(), predictions[0].max()
 
 @app.post("/predict")
@@ -33,8 +39,8 @@ async def prediction(file: UploadFile = File(...)):
 
     # Return the prediction results
     return {
-      "class": predicted_class,
-      "probability": probability
+      "class": int(predicted_class),
+      "probability": float(probability)
     }
   except Exception as e:
     return {"error": str(e)}
