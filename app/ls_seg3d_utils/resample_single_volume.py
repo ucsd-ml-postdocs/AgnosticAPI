@@ -1,6 +1,7 @@
 # python script to resample a single 3D volume
 
 import os
+import sys
 
 '''
 @:return the tmp c3d output file path 
@@ -22,8 +23,14 @@ def resample_single_volume(path):
         os.mkdir(output_folder)
     # print(os.getcwd())
     # print(os.listdir())
-    # command = './app/c3d_linux'+' '+input_file+' '+interp+' '+resamp+' '+output_file
-    command = './app/c3d_macos_arm' + ' ' + input_file + ' ' + interp + ' ' + resamp + ' ' + output_file
+    
+    #### Joe added code 
+    system = sys.platform
+    if system == 'linux':
+        command = './app/c3d_linux'+' '+input_file+' '+interp+' '+resamp+' '+output_file
+    elif system == 'darwin':
+        command = './app/c3d_macos_arm' + ' ' + input_file + ' ' + interp + ' ' + resamp + ' ' + output_file
+    
     ret = os.system(command)
     # print(f"command: {command}")
     # print(os.listdir())
