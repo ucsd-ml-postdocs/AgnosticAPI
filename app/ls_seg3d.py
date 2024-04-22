@@ -79,6 +79,7 @@ def ls_seg3d(image_path):
         for i2 in range(0, img_crop.shape[1] - 127, patch_step_d2):
             for i3 in range(0, img_crop.shape[2] - 95, patch_step_d3):
                 patch = img_crop[i1:i1 + 128, i2:i2 + 128, i3:i3 + 96]
+                print(i1,i2,i3, patch.shape)
                 x = np.expand_dims(patch, 0)
                 x = np.expand_dims(x, 4)
                 logits = model.predict(x,
@@ -131,5 +132,6 @@ def ls_seg3d(image_path):
         labels.shape[1]) + ',' + str(labels.shape[0]) + ')')
 
     os.system('rm -r tmp')
-    del nii_img_data, img_crop, img_pred, norm_array, img_pred_norm, prob, labels
-    del prob_nii, img_crop_nii, labels_nii
+    return prob, labels
+    ###del nii_img_data, img_crop, img_pred, norm_array, img_pred_norm, prob, labels
+    ###del prob_nii, img_crop_nii, labels_nii
