@@ -13,7 +13,8 @@ from PIL import Image
 import io
 import json
 ## for seg3dtest
-import app.ls_seg3d as ls_seg3d
+#import app.ls_seg3d as ls_seg3d
+import ls_seg3d as ls_seg3d
 
 print(tf.__version__)
 app = FastAPI()
@@ -103,7 +104,10 @@ async def seg3dtest(uploaded_file: UploadFile = File(...)):
         print("frames_dict: ", type(frames_dict), sys.getsizeof(frames_dict))
 
         #return JSONResponse(content = jsonable_encoder(frames_dict))
-        return StreamingResponse
+        data = io.BytesIO(labels.tobytes())
+        response = StreamingResponse(data, media_type = 'application/octet-stream')
+        return response
+    
     except Exception as e:
         if os.path.exists('tmp'):
             os.system('rm -r tmp')
