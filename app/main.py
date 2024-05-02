@@ -3,7 +3,7 @@ import shutil
 import sys
 
 from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.encoders import jsonable_encoder
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.models import load_model
@@ -74,7 +74,7 @@ async def seg3dtest(uploaded_file: UploadFile = File(...)):
         with open(path, 'w+b') as file:
             shutil.copyfileobj(uploaded_file.file, file)
         print(os.system('ls ./'))
-        prob, labels = ls_seg3d.ls_seg3d(path)
+        labels = ls_seg3d.ls_seg3d(path)
         labels = labels.astype(np.uint8)
 
         print("labels size info: ", labels.shape, labels.dtype, labels.nbytes)
@@ -102,7 +102,8 @@ async def seg3dtest(uploaded_file: UploadFile = File(...)):
             frames_dict[f'frame_{i}'] = labels[:, :, i].tolist()
         print("frames_dict: ", type(frames_dict), sys.getsizeof(frames_dict))
 
-        return JSONResponse(content = jsonable_encoder(frames_dict))
+        #return JSONResponse(content = jsonable_encoder(frames_dict))
+        return StreamingResponse
     except Exception as e:
         if os.path.exists('tmp'):
             os.system('rm -r tmp')

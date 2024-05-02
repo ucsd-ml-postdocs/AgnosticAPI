@@ -132,6 +132,6 @@ def ls_seg3d(image_path):
         labels.shape[1]) + ',' + str(labels.shape[0]) + ')')
 
     os.system('rm -r tmp')
-    return prob, labels
+    return labels
     ###del nii_img_data, img_crop, img_pred, norm_array, img_pred_norm, prob, labels
     ###del prob_nii, img_crop_nii, labels_nii
