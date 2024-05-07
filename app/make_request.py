@@ -22,3 +22,4 @@ else:
     data = response.content
     mask = np.frombuffer(data, dtype=np.uint8).reshape((200,200,160))
     print(mask)
+    np.save('mask.npy', mask)
