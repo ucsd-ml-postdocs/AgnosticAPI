@@ -66,7 +66,8 @@ def ls_seg3d(image_path):
 
     img_crop = ut.crop_or_pad(nii_img_data, crop_dim,
                               value=(-1024 - mean) / std)
-
+    print("img_crop shape: ", img_crop.shape)
+    print("nii_img_data shape: ", nii_img_data.shape)
     # preallocate space for prediction
     img_pred = np.zeros(np.concatenate((img_crop.shape, [10])))
     norm_array = np.zeros(np.concatenate((img_crop.shape, [10])))
@@ -127,12 +128,13 @@ def ls_seg3d(image_path):
         os.mkdir(vol_folder)
         # os.mkdir(vol_folder+'pred-nii-p20230623-163203wh500epochs/')
         os.mkdir(vol_folder + 'seg-nii-p20230623-163203wh500epochs/')
-
+    
+    ### The following code will save the predictions 
+    '''
     nib.save(labels_nii, vol_folder+'/seg_'+image_path.split('/')[-1])
     print('Saved prediction shape: (' + str(labels.shape[0]) + ',' + str(
         labels.shape[1]) + ',' + str(labels.shape[0]) + ')')
-
+    '''
+    
     os.system('rm -r tmp')
     return labels
-    ###del nii_img_data, img_crop, img_pred, norm_array, img_pred_norm, prob, labels
-    ###del prob_nii, img_crop_nii, labels_nii
