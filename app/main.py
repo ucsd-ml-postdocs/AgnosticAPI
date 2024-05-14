@@ -14,8 +14,8 @@ import sys
 import json
 
 ## for seg3dtest
-#import app.ls_seg3d as ls_seg3d              # app. prefix is needed for running docker
-import ls_seg3d as ls_seg3d
+import app.ls_seg3d as ls_seg3d              # app. prefix is needed for running docker
+#import ls_seg3d as ls_seg3d
 
 print(tf.__version__)
 app = FastAPI()

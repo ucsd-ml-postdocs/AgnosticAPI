@@ -3,8 +3,10 @@ import nibabel as nib
 import numpy as np
 from tensorflow import keras
 import matplotlib.pyplot as plt
-#import app.ls_seg3d_utils as ut
-import ls_seg3d_utils as ut
+
+import app.ls_seg3d_utils as ut
+#import ls_seg3d_utils as ut
+
 import tensorflow as tf
 import tqdm
 
