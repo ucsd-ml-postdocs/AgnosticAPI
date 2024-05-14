@@ -2,6 +2,7 @@ import requests
 import numpy as np
 import glob
 url = 'http://localhost:80/seg3dtest/'
+url = 'http://132.239.113.208:80/seg3dtest/'
 file_path = '/home/harp/Desktop/15_NRR-ID27468.nii'
 file_path = '/Users/joe/Downloads/15_NRR-ID27468.nii'
 file_path = '/home/harp/Desktop/15_NRR-ID27468.nii'
