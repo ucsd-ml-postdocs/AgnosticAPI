@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 
 import app.ls_seg3d_utils as ut
 #import ls_seg3d_utils as ut
-
 import tensorflow as tf
 import tqdm
 
