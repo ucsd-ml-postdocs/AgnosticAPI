@@ -16,12 +16,11 @@ import json
 import uuid  # Import UUID library
 
 ## for seg3dtest
-import app.ls_seg3d as ls_seg3d              # app. prefix is needed for running docker
-#import ls_seg3d as ls_seg3d
+#import app.ls_seg3d as ls_seg3d              # app. prefix is needed for running docker
+import ls_seg3d
 
 print(tf.__version__)
 app = FastAPI()
-
 def validate_uuid(uuid_str: str) -> bool:
     try:
         uuid.UUID(uuid_str)
@@ -108,3 +107,4 @@ async def seg3dtest(uploaded_file: UploadFile = File(...),
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)   # run on localhost port 8000 by default
+

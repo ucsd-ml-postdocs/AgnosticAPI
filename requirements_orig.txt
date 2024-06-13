@@ -1,0 +1,9 @@
+scikit-learn==1.0.2
+# tensorflow==2.16.1
+tensorflow==2.12
+# shutil
+python-multipart
+tqdm
+Pillow
+nibabel
+matplotlib
