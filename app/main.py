@@ -16,8 +16,8 @@ import json
 import uuid  # Import UUID library
 
 ## for seg3dtest
-#import app.ls_seg3d as ls_seg3d              # app. prefix is needed for running docker
-import ls_seg3d
+import app.ls_seg3d as ls_seg3d              # app. prefix is needed for running docker
+#import ls_seg3d
 
 print(tf.__version__)
 app = FastAPI()
@@ -69,6 +69,7 @@ async def prediction(file: UploadFile = File(...)):
 async def seg3dtest(uploaded_file: UploadFile = File(...),
                     uuid: str = Header(None)):
     try:
+        print("Inside TRY!!!")
         #if uuid is None or not validate_uuid(uuid):
         #    raise HTTPException(status_code=400, detail="Invalid or missing UUID")
         print("Received UUID server: ", str(uuid))

@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import tqdm
 
-#import app.ls_seg3d_utils as ut   # use this for docker
-import ls_seg3d_utils as ut      # use this for running from the command line
+import app.ls_seg3d_utils as ut   # use this for docker
+#import ls_seg3d_utils as ut      # use this for running from the command line
 
 from scipy.ndimage import gaussian_filter
 def compute_gaussian(tile_size, sigma_scale, dtype=np.float32) \

@@ -1,5 +1,5 @@
-# Use the official Ubuntu 22.04 as the base image
-FROM ubuntu:22.04
+# Use an official TensorFlow image that supports multi-architecture
+FROM tensorflow/tensorflow:2.12.0
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -19,17 +19,15 @@ RUN apt-get update && apt-get install -y \
 # Upgrade pip
 RUN pip3 install --upgrade pip
 
-# Install TensorFlow 2.12
-RUN pip3 install tensorflow==2.12
+# Install additional Python dependencies
 RUN pip3 install fastapi uvicorn tqdm Pillow nibabel matplotlib
+
 # Set the working directory
 WORKDIR /app
 
 # Copy application code to the container
-########COPY ./app /app
+###COPY ./app /app
 COPY ./app /app/app
 
-# Default command to run when starting the container
-#CMD ["python3", "app/main.py"]
 # Default command to run when starting the container
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
