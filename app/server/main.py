@@ -15,12 +15,15 @@ import sys
 import json
 import uuid  # Import UUID library
 
+
 ## for seg3dtest
-import app.ls_seg3d as ls_seg3d              # app. prefix is needed for running docker
+#import server.ls_seg3d as ls_seg3d              # app. prefix is needed for running docker
+import app.server.seg3d_backend.ls_seg3d as ls_seg3d
 #import ls_seg3d
 
-print(tf.__version__)
+print("Tensorflow version: ", tf.__version__)
 app = FastAPI()
+
 def validate_uuid(uuid_str: str) -> bool:
     try:
         uuid.UUID(uuid_str)
@@ -30,7 +33,7 @@ def validate_uuid(uuid_str: str) -> bool:
 
 def predict(img):
     # Load the MobileNetV2 model (assuming it's in the same directory)
-    model = load_model('app/models/cv_model/MobileNetv2_model.keras')
+    model = load_model('app/server/models/cv_model/MobileNetv2_model.keras')
 
     # Preprocess the image (resize, normalize etc.)
     img = np.uint8(tf.image.resize(tf.io.decode_image(img), (224, 224),
@@ -69,7 +72,6 @@ async def prediction(file: UploadFile = File(...)):
 async def seg3dtest(uploaded_file: UploadFile = File(...),
                     uuid: str = Header(None)):
     try:
-        print("Inside TRY!!!")
         #if uuid is None or not validate_uuid(uuid):
         #    raise HTTPException(status_code=400, detail="Invalid or missing UUID")
         print("Received UUID server: ", str(uuid))

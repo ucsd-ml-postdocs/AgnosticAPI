@@ -27,9 +27,9 @@ def resample_single_volume(path):
     #### Joe added code 
     system = sys.platform
     if system == 'linux':
-        command = './app/c3d_linux'+' '+input_file+' '+interp+' '+resamp+' '+output_file
+        command = './app/server/seg3d_backend/c3d_linux'+' '+input_file+' '+interp+' '+resamp+' '+output_file
     elif system == 'darwin':
-        command = './app/c3d_macos_arm' + ' ' + input_file + ' ' + interp + ' ' + resamp + ' ' + output_file
+        command = './app/server/seg3d_backend/c3d_macos_arm' + ' ' + input_file + ' ' + interp + ' ' + resamp + ' ' + output_file
     
     ret = os.system(command)
     # print(f"command: {command}")

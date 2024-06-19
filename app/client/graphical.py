@@ -17,7 +17,7 @@ def start_segmentation():
   if mask is not None:
     # Add logic to process or display the segmentation mask (e.g., new window)
     print("Segmentation completed!")
-    np.save('app/Predictions/mask.npy', mask)
+    np.save('app/client/Predictions/mask.npy', mask)
   else:
     print("Error during upload or processing.")
 

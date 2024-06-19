@@ -5,11 +5,12 @@ from tensorflow import keras
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import tqdm
-
-import app.ls_seg3d_utils as ut   # use this for docker
-#import ls_seg3d_utils as ut      # use this for running from the command line
-
 from scipy.ndimage import gaussian_filter
+
+#import app.ls_seg3d_utils as ut   # use this for docker
+#import ls_seg3d_utils as ut      # use this for running from the command line
+import app.server.seg3d_backend.ls_seg3d_utils as ut
+
 def compute_gaussian(tile_size, sigma_scale, dtype=np.float32) \
         -> np.ndarray:
     tmp = np.zeros(tile_size)
@@ -32,8 +33,8 @@ import pickle
 def ls_seg3d(image_path):
     # path_to_data = 'app/ls_seg3D_laptop/'
 
-    model_name = 'app/models/ls_seg3d_model/m20230623-163203wh500epochs'
-    history_name = 'app/models/ls_seg3d_model/h20230623-163203wh500epochs'
+    model_name = 'app/server/models/ls_seg3d_model/m20230623-163203wh500epochs'
+    history_name = 'app/server/models/ls_seg3d_model/h20230623-163203wh500epochs'
 
     model = keras.models.load_model(model_name)
     with open(history_name, "rb") as file_pi:
@@ -45,11 +46,9 @@ def ls_seg3d(image_path):
 
     gauss_window_multiplier = np.repeat(gaussian_window[:, :, :, np.newaxis], 10,
                                         axis=3)
-    print(gauss_window_multiplier.shape)
 
-    save_folder = 'app/Predictions/p20230623-163203wh500epochs/'
+    save_folder = 'app/client/Predictions/p20230623-163203wh500epochs/'
     os.makedirs(save_folder, exist_ok=True)
-
     resampled_image_path = ut.resample_single_volume(image_path)
 
     # load and normalize image
