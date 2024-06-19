@@ -24,13 +24,16 @@ RUN pip3 install tensorflow==2.12
 RUN pip3 install fastapi uvicorn tqdm Pillow nibabel matplotlib
 
 # Set the working directory
-WORKDIR /app
+#WORKDIR /app
+WORKDIR /AgnosticAPI/app/server
 
 # Copy application code to the container
-COPY ./app /app/app
+#COPY . /AgnosticAPI/app/server
+# Copy the entire AgnosticAPI directory to the WORKDIR
+COPY ./app/server /AgnosticAPI/app/server
 
 # Expose the port
 EXPOSE 8000
 
 # Default command to run when starting the container
-CMD ["uvicorn", "app.server.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
