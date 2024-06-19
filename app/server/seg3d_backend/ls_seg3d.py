@@ -9,7 +9,9 @@ from scipy.ndimage import gaussian_filter
 
 #import app.ls_seg3d_utils as ut   # use this for docker
 #import ls_seg3d_utils as ut      # use this for running from the command line
-import app.server.seg3d_backend.ls_seg3d_utils as ut
+
+#import app.server.seg3d_backend.ls_seg3d_utils as ut    ### use with docker
+import seg3d_backend.ls_seg3d_utils as ut
 
 def compute_gaussian(tile_size, sigma_scale, dtype=np.float32) \
         -> np.ndarray:
@@ -49,7 +51,9 @@ def ls_seg3d(image_path):
 
     save_folder = 'app/client/Predictions/p20230623-163203wh500epochs/'
     os.makedirs(save_folder, exist_ok=True)
+    print("BEFORE")
     resampled_image_path = ut.resample_single_volume(image_path)
+    print("AFTER")
 
     # load and normalize image
     nii_img = nib.load(resampled_image_path)

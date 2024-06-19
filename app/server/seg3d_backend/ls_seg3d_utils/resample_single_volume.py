@@ -26,6 +26,7 @@ def resample_single_volume(path):
     
     #### Joe added code 
     system = sys.platform
+    print("Current working directory: ", os.getcwd())
     if system == 'linux':
         command = './app/server/seg3d_backend/c3d_linux'+' '+input_file+' '+interp+' '+resamp+' '+output_file
     elif system == 'darwin':

@@ -17,8 +17,9 @@ import uuid  # Import UUID library
 
 
 ## for seg3dtest
-#import server.ls_seg3d as ls_seg3d              # app. prefix is needed for running docker
-import app.server.seg3d_backend.ls_seg3d as ls_seg3d
+#import app.server.seg3d_backend.ls_seg3d as ls_seg3d             ### use for docker
+import seg3d_backend.ls_seg3d as ls_seg3d
+print("MADE IT HERE")
 #import ls_seg3d
 
 print("Tensorflow version: ", tf.__version__)
