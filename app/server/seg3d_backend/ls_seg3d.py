@@ -51,13 +51,13 @@ def ls_seg3d(image_path):
 
     gauss_window_multiplier = np.repeat(gaussian_window[:, :, :, np.newaxis], 10,
                                         axis=3)
-
+    
     save_folder = 'app/client/Predictions/p20230623-163203wh500epochs/'
-    os.makedirs(save_folder, exist_ok=True)
+    #os.makedirs(save_folder, exist_ok=True)
     print("BEFORE")
     resampled_image_path = ut.resample_single_volume(image_path)
     print("AFTER")
-
+    
     # load and normalize image
     nii_img = nib.load(resampled_image_path)
     nii_img_data = nii_img.get_fdata()
@@ -129,19 +129,20 @@ def ls_seg3d(image_path):
     labels_nii = nib.Nifti1Image(labels, nii_img.affine, nii_img.header)
 
     # where to save prediction and cropped image/segmentation
+    '''    
     vol_folder = save_folder
     if not os.path.exists(vol_folder):
         # print(vol_folder)
         os.mkdir(vol_folder)
         # os.mkdir(vol_folder+'pred-nii-p20230623-163203wh500epochs/')
         os.mkdir(vol_folder + 'seg-nii-p20230623-163203wh500epochs/')
-    
-    ### The following code will save the predictions 
     '''
-    nib.save(labels_nii, vol_folder+'/seg_'+image_path.split('/')[-1])
+    ### The following code will save the predictions 
+    
+    #nib.save(labels_nii, vol_folder+'/seg_'+image_path.split('/')[-1])
     print('Saved prediction shape: (' + str(labels.shape[0]) + ',' + str(
         labels.shape[1]) + ',' + str(labels.shape[0]) + ')')
-    '''
+    
     
     os.system('rm -r tmp')
     return labels

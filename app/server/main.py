@@ -92,6 +92,7 @@ async def seg3dtest(uploaded_file: UploadFile = File(...),
         response.headers['X-Response-UUID'] = str(uuid)
 
         # Return the StreamingResponse object
+        os.system("rm -r "+ path)
         return response
         '''
         # Generate a UUID for the request
