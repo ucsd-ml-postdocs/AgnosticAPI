@@ -19,6 +19,8 @@ AGNOSTICAPI
 │       │   ├── cv_model   # (11) Computer vision model directory.
 │       │   │   └── MobileNetv2_model.keras   # (12) MobileNetV2 model file for image classification.
 │       │   ├── ls_seg3d_model   # (13) Directory for 3D segmentation model.
+│       │   │   └── m20230623-163203wh500epochs   # (13a) Seg3D Tensorflow model (current version).
+│       │   │   └── h20230623-163203wh500epochs   # (13b) Tensorflow model history (previous versions).
 │       │   ├── joe_download_and_run.py   # (14) Script for downloading and running Joe's model.
 │       │   └── model.py   # (15) Script for handling model loading and inference.
 │       │
@@ -30,7 +32,7 @@ AGNOSTICAPI
 │           ├── ls_seg3d.py   # (21) Main script for 3D segmentation.
 │       └── main.py   # (22) Main script for starting the FastAPI server.
 │
-├── media   # (23) Directory for storing media files (empty here).
+├── media   # (23) Directory for storing media files.
 │
 ├── .gitignore   # (24) Git ignore file to exclude files from version control.
 ├── 15_NRR-ID27468.nii   # (25) Sample NIfTI file for testing.
@@ -38,40 +40,57 @@ AGNOSTICAPI
 ├── EcoVizAPI_seg3d_joe_contract.docx   # (27) EcoViz API contract with rules for engagement.
 ├── README.md   # (28) Readme file containing the project overview and instructions.
 ├── requirements.txt   # (29) List of Python dependencies for the project.
-├── seg3Denv.yml   # (30) Conda environment configuration file.
-├── seg3DenvMini.yml   # (31) Minimal Conda environment configuration file.
-├── test.txt   # (32) Test file (purpose unclear from the name).
-└── view_mask.ipynb   # (33) Jupyter notebook for visualizing prediction masks.
+├── seg3DenvMini.yml   # (30) Minimal Conda environment configuration file.
+├── test.txt   # (31) Test file (purpose unclear from the name).
+└── view_mask.ipynb   # (32) Jupyter notebook for visualizing prediction masks.
+
 
 ```
 
 
-To run, you will need:
-1. **Docker** https://www.docker.com/products/docker-desktop
-    Optional: Create DockerHub account to save and manage your images and containers.
-2. **Postman** https://www.postman.com/downloads/
-    This will allow you to send and receive requests with the API. You will need to create an account through your institution. 
-
-Navigate to your AgnosticAPI directory and run the code below in your terminal:
-
+1. **Set up your environment:** To run, you will need to set up your environment. There are three options for doing this:
+    
+1a. On Windows, we recommend Docker:
 ```
 docker build -t mobile-net-app .
 docker run -p 80:80 mobile-net-app
 ```
 
-1. Copy URL output from Terminal: ![alt text](media/image.png)
-2. In postman, create a new collection: ![alt text](media/image2.png)
-3. Add a request, change to a POST request: ![alt text](media/image4.png)
-4. Navigate to Body tab: ![alt text](media/image3.png)
-5. Paste your http address in the field next to POST and add `/predict`: ![alt text](media/image5.png) This calls the prediction function in the main.py file.
-6. Change dropdown menu from `Text ` to `File` and then upload a JPEG file from your local directory. 
+1b. On Mac (with Mac chip), we recommend using `conda`. From within the AgnosticAPI directory, please run (line by line):
+```
+conda env create -f seg3DenvMini.yml -n apienv
+conda activate apienv
+conda env update -f seg3DenvMini.yml
+```
 
-Then in postman, set the url to: http://localhost:80
+1c. If these options do not work for you, you can set up your own virtual environment with the requirements listed in `requirements.txt`.
 
-In postman, create a new POST request
-set the url to: http://localhost:80/predict
-Click on the Body tab
-Select form-data as the body type
-Add a key named file (matches the parameter name in the FastAPI function)
-Click Browse and select the image file you want to classify
-Click the Send button to send the POST request with the image
+2. **Start the Server:**
+    1. From inside the AgnosticAPI directory, move to the app/server/ directory and run:
+        
+        ```bash
+        python main.py
+        ```
+        
+        This command will launch the API, which should, by default, be listening on port 8000. You can edit the current path from 80 to 8000.
+
+### Setting up the Client
+3. **Download the Required File:**
+    1. Download the file `15_NRR-ID27468` from the `RSE_API` folder.
+    **Start the Client GUI:**
+    2. Inside the AgnosticAPI directory, run:
+        
+        ```bash
+        python app/client/graphical.py
+        ```
+        
+        This will launch the graphical interface where you can specify important information. 
+        
+        First update the IP address and port that the server is listening on. This information can be found on the line ‘Uvicorn running on …’.
+
+        Specify the path to `15_NRR-ID27468` and hit “start segmentation”. On the server end, you should see a message indicating that the segmentation process has started and output messages indicating the cropping process.
+        
+4. **Verify the Returned Values/Labels:**
+    1. After the segmentation process is complete, the client should receive a “Segmentation completed!” message.
+    2. On the client’s system, you should see the following file: `app/Predictions/mask.npy`
+    3. To inspect some of the frames, run the Jupyter notebook file `AgnosticAPI/view_mask.ipynb`.
