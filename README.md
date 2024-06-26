@@ -35,7 +35,7 @@ AGNOSTICAPI
 ├── .gitignore   # (24) Git ignore file to exclude files from version control.
 ├── 15_NRR-ID27468.nii   # (25) Sample NIfTI file for testing.
 ├── Dockerfile   # (26) Docker configuration file for containerizing the application.
-├── EcoVizAPI_seg3d_joe_contract.docx   # (27) Documentation related to the EcoViz API contract.
+├── EcoVizAPI_seg3d_joe_contract.docx   # (27) EcoViz API contract with rules for engagement.
 ├── README.md   # (28) Readme file containing the project overview and instructions.
 ├── requirements.txt   # (29) List of Python dependencies for the project.
 ├── seg3Denv.yml   # (30) Conda environment configuration file.
