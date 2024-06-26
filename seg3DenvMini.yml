@@ -13,5 +13,6 @@ dependencies:
   - pillow
   - nibabel
   - matplotlib
+  - streamlit
   - pip:
     - python-multipart

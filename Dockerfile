@@ -1,5 +1,5 @@
 # Use the official Ubuntu 22.04 as the base image
-FROM python:3.11
+FROM python:3.8
 
 COPY ./requirements.txt /app/requirements.txt
 RUN apt-get update && apt-get install -y libhdf5-dev libhdf5-serial-dev
