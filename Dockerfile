@@ -1,9 +1,16 @@
 # Use the official Ubuntu 22.04 as the base image
-FROM ubuntu:22.04
+FROM python:3.8
 
 COPY ./requirements.txt /app/requirements.txt
 RUN apt-get update && apt-get install -y libhdf5-dev libhdf5-serial-dev
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+RUN apt-get install -y libhdf5-dev
+RUN pip install Cython --upgrade
+RUN pip install setuptools --upgrade
+RUN pip install wheel --upgrade
+RUN pip install h5py
+# # Install pip
+# RUN apt-get install -y python3-pip
+# #RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 
 # Upgrade pip
 RUN pip3 install --upgrade pip
