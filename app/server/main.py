@@ -23,8 +23,9 @@ print("MADE IT HERE")
 #import ls_seg3d
 
 print("Tensorflow version: ", tf.__version__)
-app = FastAPI()
+app = FastAPI() # Create a FastAPI instance that will be used to define the API
 
+# Validating the user ID
 def validate_uuid(uuid_str: str) -> bool:
     try:
         uuid.UUID(uuid_str)
@@ -51,7 +52,8 @@ def predict(img):
     # https://deeplearning.cms.waikato.ac.nz/user-guide/class-maps/IMAGENET/
     return predictions[0].argmax(), predictions[0].max()
 
-@app.post("/predict")
+# FastAPI decorator to define the API endpoint
+@app.post("/predict") # using an HTML method applied to a resource
 async def prediction(file: UploadFile = File(...)):
     try:
         # Read the image data
