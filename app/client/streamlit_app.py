@@ -16,14 +16,13 @@ def start_segmentation(file, server_url):
         st.error("No file selected.")
 
 # Title and description
-st.title("Segmentation Client")
-st.write("Select a medical data file and initiate segmentation.")
+st.title("Agnostic API")
+st.write("Select a data file and kick off your model.")
 
 # Server URL selection
 server_url_options = [
-    "http://localhost:80/seg3dtest/",
-    'http://132.239.113.208:80/seg3dtest/',
-    "http://your-server2.com:5000/segmentation",
+    "http://localhost:8000/seg3d/",
+    "http://localhost:8000/cv/",
     "custom"
 ]
 server_url = st.selectbox("Server URL", server_url_options)
@@ -33,7 +32,7 @@ if server_url == "custom":
     server_url = st.text_input("Enter Custom URL")
 
 # File selection
-file = st.file_uploader("Select Medical Data File", type=["nii"])
+file = st.file_uploader("Select Data File", type=["nii"])
 
 # Start segmentation button
 if st.button("Start Segmentation"):

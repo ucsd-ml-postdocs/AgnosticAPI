@@ -53,7 +53,7 @@ def predict(img):
     return predictions[0].argmax(), predictions[0].max()
 
 # FastAPI decorator to define the API endpoint
-@app.post("/predict") # using an HTML method applied to a resource
+@app.post("/cv") # using an HTML method applied to a resource
 async def prediction(file: UploadFile = File(...)):
     try:
         # Read the image data
@@ -71,7 +71,7 @@ async def prediction(file: UploadFile = File(...)):
         return {"error": str(e)}
 
 
-@app.post("/seg3dtest")
+@app.post("/seg3d")
 async def seg3dtest(uploaded_file: UploadFile = File(...),
                     uuid: str = Header(None)):
     try:

@@ -1,7 +1,9 @@
 models/
 Predictions/*
 
-*/__pycache__/*
+__pycache__/
+app/client/__pycache__/*
+app/server/__pycache__/*
 
 */.ipynb_checkpoints/
 
