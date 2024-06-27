@@ -1,7 +1,7 @@
 # Use the official Ubuntu 22.04 as the base image
 FROM python:3.8
 
-COPY ./requirements.txt /app/requirements.txt
+COPY ./requirements.txt /agnosticapi/requirements.txt
 RUN apt-get update && apt-get install -y libhdf5-dev libhdf5-serial-dev
 RUN apt-get install -y libhdf5-dev
 RUN pip install Cython --upgrade
@@ -21,12 +21,12 @@ RUN pip3 install fastapi uvicorn tqdm Pillow nibabel matplotlib streamlit
 
 # Set the working directory
 #WORKDIR /app
-WORKDIR /AgnosticAPI/app/server
+WORKDIR /AgnosticAPI/agnosticapi/server
 
 # Copy application code to the container
 #COPY . /AgnosticAPI/app/server
 # Copy the entire AgnosticAPI directory to the WORKDIR
-COPY ./app/server /AgnosticAPI/app/server
+COPY ./agnosticapi/server /AgnosticAPI/agnosticapi/server
 
 # Expose the port
 EXPOSE 8000

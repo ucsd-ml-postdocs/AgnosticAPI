@@ -1,0 +1,30 @@
+[build-system]
+requires = [
+  "setuptools>=62.1",
+  "setuptools_scm[toml]>=8.0",
+  "wheel",]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agnosticapi"
+description = "Tools for analysing the water air interface to programmatically detect surface waves."
+requires-python = ">=3.8" # specifying minimum and maximum python versions
+version = "0.1.0"
+authors = [
+  { name = "Joe Walker", email = "jlwalker@ucsd.edu" },
+  { name = "Jessica Kendall-Bar", email = "jkendallbar@ucsd.edu" },
+]
+dependencies = [
+  "tensorflow==2.12",
+  "fastapi",
+  "matplotlib >3.6",
+  "uvicorn",
+  "tqdm",
+  "pillow",
+  "nibabel",
+  "streamlit",
+]
+
+[tool_setuptools.packages.find] # finds submodules
+packages = "agnosticapi"
+exclude = ["media", "docs", "notebooks"]

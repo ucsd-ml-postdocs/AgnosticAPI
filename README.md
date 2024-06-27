@@ -58,9 +58,13 @@ docker run -p 80:80 mobile-net-app
 
 1b. On Mac (with Mac chip), we recommend using `conda`. From within the AgnosticAPI directory, please run (line by line):
 ```
-conda env create -f seg3DenvMini.yml -n apienv
+conda env create -n apienv python=3.8
 conda activate apienv
-conda env update -f seg3DenvMini.yml
+```
+For me, this yml script was being problematic, so instead I wanted to just install the dependencies one by one, and that worked.
+
+```
+conda env update -f seg3DenvMini.yml 
 ```
 
 1c. If these options do not work for you, you can set up your own virtual environment with the requirements listed in `requirements.txt`.
@@ -72,7 +76,7 @@ conda env update -f seg3DenvMini.yml
         python main.py
         ```
         
-        This command will launch the API, which should, by default, be listening on port 8000. You can edit the current path from 80 to 8000.
+        This command will launch the API, which should, by default, be listening on port 8000.
 
 ### Setting up the Client
 3. **Download the Required File:**

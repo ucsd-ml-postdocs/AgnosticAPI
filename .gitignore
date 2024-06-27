@@ -2,8 +2,8 @@ models/
 Predictions/*
 
 __pycache__/
-app/client/__pycache__/*
-app/server/__pycache__/*
+agnosticapi/client/__pycache__/*
+agnosticapi/server/__pycache__/*
 
 */.ipynb_checkpoints/
 
@@ -14,6 +14,9 @@ __pycache__/
 
 # C extensions
 *.so
+
+*/.DS_Store
+.DS_Store
 
 # Distribution / packaging
 .Python
@@ -169,3 +172,4 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+.DS_Store
