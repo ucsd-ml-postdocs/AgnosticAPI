@@ -32,7 +32,7 @@ def validate_uuid(uuid_str: str) -> bool:
 
 def predict(img):
     # Load the MobileNetV2 model (assuming it's in the same directory)
-    model = load_model('app/server/models/cv_model/MobileNetv2_model.keras')
+    model = load_model('agnosticapi/server/models/cv_model/MobileNetv2_model.keras')
 
     # Preprocess the image (resize, normalize etc.)
     img = np.uint8(tf.image.resize(tf.io.decode_image(img), (224, 224),

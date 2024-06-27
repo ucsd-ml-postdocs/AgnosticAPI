@@ -1,13 +1,11 @@
 import os
 import streamlit as st
 import numpy as np
-from segmentation_client import upload_for_segmentation
-
-from agnosticapi.server.media import dir as media_dir
-from agnosticapi.server.models import CVModel, Seg3DModel
+from upload import upload_for_prediction
+from agnosticapi.server.media import dir
 
 # Dynamically determine the path to the logo
-logo_path = os.path.join(media_dir, 'DALLE_JKB_logo.png')
+logo_path = os.path.join(dir, 'DALLE_JKB_logo.png')
 
 # Verify the path
 if not os.path.isfile(logo_path):
@@ -15,14 +13,18 @@ if not os.path.isfile(logo_path):
 else:
     st.image(logo_path, width=300)  # Adjust the width as needed
 
-# Function to handle file selection and initiate segmentation
-def start_segmentation(file, server_url):
+# Function to handle file selection and initiate prediction
+def start_prediction(file, server_url):
     if file is not None:
-        mask = upload_for_segmentation(file, server_url=server_url)
-        if mask is not None:
-            st.success("Model run completed!")
-            np.save('agnosticapi/client/Predictions/mask.npy', mask)
-            st.write("Prediction output generated and saved.")
+        result = upload_for_prediction(file, server_url=server_url)
+        if result is not None:
+            if isinstance(result, np.ndarray):
+                st.success("Segmentation model run completed!")
+                np.save('agnosticapi/client/Predictions/mask.npy', result)
+                st.write("Segmentation output generated and saved.")
+            else:
+                st.success("Prediction model run completed!")
+                st.json(result)
         else:
             st.error("Error during upload or processing.")
     else:
@@ -45,8 +47,8 @@ if server_url == "custom":
     server_url = st.text_input("Enter Custom URL")
 
 # File selection
-file = st.file_uploader("Select Data File", type=["nii"])
+file = st.file_uploader("Select Data File", type=["nii", "jpg", "png", "jpeg"])
 
-# Start segmentation button
-if st.button("Start Segmentation"):
-    start_segmentation(file, server_url)
+# Start prediction button
+if st.button("Start Prediction"):
+    start_prediction(file, server_url)

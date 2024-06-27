@@ -1,3 +1,4 @@
+from agnosticapi.server.models.ls_seg3d_model.seg3d_backend import ls_seg3d
 from tensorflow.keras.models import load_model
 import numpy as np
 import os
@@ -27,10 +28,7 @@ class Model:
     def load(self, model_path):
         self.model = load_model(model_path)
 
-    def preprocess(self, file):
-        raise NotImplementedError("This method should be overridden by subclasses")
-
-    def predict(self, data):
+    def predict(self, file):
         raise NotImplementedError("This method should be overridden by subclasses")
 
     def save_output(self, output, output_path):
@@ -51,10 +49,7 @@ class CVModel(Model):
 class Seg3DModel(Model):
 
     from agnosticapi.server.models.ls_seg3d_model.seg3d_backend.ls_seg3d import ls_seg3d
-    def preprocess(self, file_path):
-        
-        pass
-
+    
     def predict(self, data):
         # Custom prediction for segmentation
         labels = ls_seg3d.ls_seg3d()
