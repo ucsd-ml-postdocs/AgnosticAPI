@@ -41,7 +41,9 @@ def ls_seg3d(image_path):
     model_name = 'models/ls_seg3d_model/m20230623-163203wh500epochs'
     history_name = 'models/ls_seg3d_model/h20230623-163203wh500epochs'
 
+    print("BEFORE")
     model = keras.models.load_model(model_name)
+    print("AFTER")
     with open(history_name, "rb") as file_pi:
         history = pickle.load(file_pi)
 

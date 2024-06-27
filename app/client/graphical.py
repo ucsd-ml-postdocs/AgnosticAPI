@@ -27,7 +27,7 @@ root.title("Segmentation Client")
 root.geometry("600x400")  # Set width and height in pixels
 
 # Server URL selection with dropdown menu and custom entry
-server_url_options = ["http://localhost:80/seg3dtest/", 'http://132.239.113.208:80/seg3dtest/', "http://your-server2.com:5000/segmentation"]
+server_url_options = ["http://localhost:8000/segment3D/", "http://132.239.113.208:8000/segment3D/", "http://your-server2.com:5000/segmentation"]
 server_url_var = tk.StringVar()
 server_url_var.set(server_url_options[0])  # Set default selection
 

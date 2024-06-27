@@ -53,8 +53,8 @@ def predict(img):
     return predictions[0].argmax(), predictions[0].max()
 
 # FastAPI decorator to define the API endpoint
-@app.post("/predict") # using an HTML method applied to a resource
-async def prediction(file: UploadFile = File(...)):
+@app.post("/ImageNetModel") # using an HTML method applied to a resource
+async def ImageNetModel(file: UploadFile = File(...)):
     try:
         # Read the image data
         image_bytes = await file.read()
@@ -71,19 +71,25 @@ async def prediction(file: UploadFile = File(...)):
         return {"error": str(e)}
 
 
-@app.post("/seg3dtest")
-async def seg3dtest(uploaded_file: UploadFile = File(...),
+@app.post("/segment3D")
+async def segment3D(uploaded_file: UploadFile = File(...),
                     uuid: str = Header(None)):
     try:
+        data_directory = 'tmp/'
         #if uuid is None or not validate_uuid(uuid):
         #    raise HTTPException(status_code=400, detail="Invalid or missing UUID")
         print("Received UUID server: ", str(uuid))
         # await uploaded_file.read()
         path = f"{uploaded_file.filename}"
+        path = data_directory + path
+        if not os.path.exists(data_directory):
+            os.makedirs(data_directory)
+
         with open(path, 'w+b') as file:
             shutil.copyfileobj(uploaded_file.file, file)
-        print(os.system('ls ./'))
+        print("Before entering ls_seg3d")
         labels = ls_seg3d.ls_seg3d(path)
+        print("After entering ls_seg3d")
         labels = labels.astype(np.uint8)
 
         print("labels size info: ", labels.shape, labels.dtype, labels.nbytes)
@@ -94,8 +100,12 @@ async def seg3dtest(uploaded_file: UploadFile = File(...),
         response.headers['X-Response-UUID'] = str(uuid)
 
         # Return the StreamingResponse object
-        os.system("rm -r "+ path)
+        if os.path.exists('tmp'):
+            os.system('rm -r tmp')
+        
+
         return response
+        
         '''
         # Generate a UUID for the request
         request_uuid = uuid.uuid4()
@@ -107,6 +117,7 @@ async def seg3dtest(uploaded_file: UploadFile = File(...),
         }
         '''
     except Exception as e:
+        print("Exception reached!!!!!!")
         if os.path.exists('tmp'):
             os.system('rm -r tmp')
         return {"error": str(e)}
