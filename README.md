@@ -61,11 +61,13 @@ docker run -p 80:80 mobile-net-app
 conda env create -n apienv python=3.8
 conda activate apienv
 ```
-For me, this yml script was being problematic, so instead I wanted to just install the dependencies one by one, and that worked.
+
+For me, this yml script was being problematic, so instead I wanted to just install the dependencies one by one, and that worked. This helped disentangle issues originating from tensorflow versus others.
 
 ```
 conda env update -f seg3DenvMini.yml 
 ```
+Note: You may have to use `conda` instead of `pip` to install tensorflow (one of us experienced this on Apple M2MAX).
 
 1c. If these options do not work for you, you can set up your own virtual environment with the requirements listed in `requirements.txt`.
 

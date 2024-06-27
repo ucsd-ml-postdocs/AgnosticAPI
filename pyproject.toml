@@ -14,7 +14,7 @@ authors = [
   { name = "Joe Walker", email = "jlwalker@ucsd.edu" },
   { name = "Jessica Kendall-Bar", email = "jkendallbar@ucsd.edu" },
 ]
-dependencies = [
+dependencies = [ 
   "tensorflow==2.12",
   "fastapi",
   "matplotlib >3.6",

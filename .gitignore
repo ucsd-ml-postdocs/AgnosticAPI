@@ -1,4 +1,5 @@
-models/
+*.keras
+
 Predictions/*
 
 __pycache__/

@@ -50,7 +50,7 @@ class CVModel(Model):
 
 class Seg3DModel(Model):
 
-    from agnosticapi.server.ls_seg3d_model.seg3d_backend import ls_seg3d
+    from agnosticapi.server.models.ls_seg3d_model.seg3d_backend.ls_seg3d import ls_seg3d
     def preprocess(self, file_path):
         
         pass

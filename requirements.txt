@@ -1,6 +1,6 @@
 pip
 hdf5
-tensorflow=2.12
+tensorflow==2.12
 fastapi
 uvicorn
 tqdm

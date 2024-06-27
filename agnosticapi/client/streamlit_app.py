@@ -3,9 +3,11 @@ import streamlit as st
 import numpy as np
 from segmentation_client import upload_for_segmentation
 
+from agnosticapi.server.media import dir as media_dir
+from agnosticapi.server.models import CVModel, Seg3DModel
+
 # Dynamically determine the path to the logo
-current_dir = os.path.dirname(os.path.abspath(__file__))
-logo_path = os.path.join(current_dir, '..', '..', 'media', 'DALLE_JKB_logo.png')
+logo_path = os.path.join(media_dir, 'DALLE_JKB_logo.png')
 
 # Verify the path
 if not os.path.isfile(logo_path):
@@ -18,9 +20,9 @@ def start_segmentation(file, server_url):
     if file is not None:
         mask = upload_for_segmentation(file, server_url=server_url)
         if mask is not None:
-            st.success("Segmentation completed!")
-            np.save('app/client/Predictions/mask.npy', mask)
-            st.write("Segmentation mask saved.")
+            st.success("Model run completed!")
+            np.save('agnosticapi/client/Predictions/mask.npy', mask)
+            st.write("Prediction output generated and saved.")
         else:
             st.error("Error during upload or processing.")
     else:

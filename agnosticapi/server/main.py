@@ -15,10 +15,7 @@ import sys
 import json
 import uuid  # Import UUID library
 
-
-## for seg3dtest
-#import app.server.seg3d_backend.ls_seg3d as ls_seg3d             ### use for docker
-import seg3d_backend.ls_seg3d as ls_seg3d
+import agnosticapi.server.models.ls_seg3d_model.seg3d_backend.ls_seg3d as ls_seg3d
 print("MADE IT HERE")
 #import ls_seg3d
 
