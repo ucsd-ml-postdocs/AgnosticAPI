@@ -53,8 +53,7 @@ Seg3D_model_V1.load(model_files)
 async def prediction(file: UploadFile = File(...)):
     try:
         image_bytes = await file.read()
-        data = cv_model.preprocess(image_bytes)
-        predictions = cv_model.predict(data)
+        predictions = cv_model.predict(image_bytes)
         predicted_class, probability = predictions[0].argmax(), predictions[0].max()
         return {"class": int(predicted_class), "probability": float(probability)}
     except Exception as e:

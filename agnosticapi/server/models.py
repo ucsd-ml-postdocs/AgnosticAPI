@@ -1,4 +1,4 @@
-from agnosticapi.server.models.ls_seg3d_model.seg3d_backend import ls_seg3d
+from agnosticapi.server.models.ls_seg3d_model import predict
 from tensorflow.keras.models import load_model
 import numpy as np
 import os
@@ -48,9 +48,9 @@ class CVModel(Model):
 
 class Seg3DModel(Model):
 
-    from agnosticapi.server.models.ls_seg3d_model.seg3d_backend.ls_seg3d import ls_seg3d
+    from agnosticapi.server.models.ls_seg3d_model.predict import predict as seg3d_predict
     
     def predict(self, data):
         # Custom prediction for segmentation
-        labels = ls_seg3d.ls_seg3d()
+        labels = predict(data)
         pass

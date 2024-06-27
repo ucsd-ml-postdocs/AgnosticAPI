@@ -15,7 +15,7 @@ import sys
 import json
 import uuid  # Import UUID library
 
-import agnosticapi.server.models.ls_seg3d_model.seg3d_backend.ls_seg3d as ls_seg3d
+import agnosticapi.server.models.ls_seg3d_model.predict as predict
 print("MADE IT HERE")
 #import ls_seg3d
 
@@ -29,25 +29,6 @@ def validate_uuid(uuid_str: str) -> bool:
         return True
     except ValueError:
         return False
-
-def predict(img):
-    # Load the MobileNetV2 model (assuming it's in the same directory)
-    model = load_model('agnosticapi/server/models/cv_model/MobileNetv2_model.keras')
-
-    # Preprocess the image (resize, normalize etc.)
-    img = np.uint8(tf.image.resize(tf.io.decode_image(img), (224, 224),
-                                   method=tf.image.ResizeMethod.BILINEAR))
-    img = img / 255 * 2 - 1        # normalize image
-    x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)  # Add batch dimension
-
-    # Make prediction
-    predictions = model.predict(x)
-
-    # Return the top prediction (modify as needed)
-    # Check classname below
-    # https://deeplearning.cms.waikato.ac.nz/user-guide/class-maps/IMAGENET/
-    return predictions[0].argmax(), predictions[0].max()
 
 # FastAPI decorator to define the API endpoint
 @app.post("/cv") # using an HTML method applied to a resource
@@ -80,7 +61,7 @@ async def seg3dtest(uploaded_file: UploadFile = File(...),
         with open(path, 'w+b') as file:
             shutil.copyfileobj(uploaded_file.file, file)
         print(os.system('ls ./'))
-        labels = ls_seg3d.ls_seg3d(path)
+        labels = predict.predict(path)
         labels = labels.astype(np.uint8)
 
         print("labels size info: ", labels.shape, labels.dtype, labels.nbytes)

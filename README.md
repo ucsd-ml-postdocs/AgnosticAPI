@@ -1,102 +1,232 @@
 # AgnosticAPI
 
-Directory tree with annotations:
+[![Actions Status][actions-badge]][actions-link]
+[![PyPI version][pypi-version]][pypi-link]
+[![PyPI platforms][pypi-platforms]][pypi-link]
+
+A tool for performing image classification and 3D segmentation using pre-trained AI models.
+
+## Directory Structure
+
 ```
 AGNOSTICAPI
 │
-├── .ipynb_checkpoints     # (1) Jupyter notebook checkpoints for saving states during development.
+├── __pycache__                # Cached bytecode files for faster execution.
 │
-├── app                    # (2) Main application directory
-│   ├── client             # (3) Client-side code for the application
-│   │   ├── __pycache__    # (4) Cached bytecode files for faster execution.
-│   │   ├── Predictions    # (5) Directory to store prediction results.
-│   │   │   └── mask.npy   # (6) Numpy file containing the prediction mask.
-│   │   ├── graphical.py   # (7) Script for the GUI client using tkinter for file selection and segmentation.
-│   │   └── segmentation_client.py   # (8) Script to handle the client-side segmentation requests.
-│   │
-│   ├── server             # (9) Server-side code for the application.
-│       ├── models         # (10) Directory to store the ML models.
-│       │   ├── cv_model   # (11) Computer vision model directory.
-│       │   │   └── MobileNetv2_model.keras   # (12) MobileNetV2 model file for image classification.
-│       │   ├── ls_seg3d_model   # (13) Directory for 3D segmentation model.
-│       │   │   └── m20230623-163203wh500epochs   # (13a) Seg3D Tensorflow model (current version).
-│       │   │   └── h20230623-163203wh500epochs   # (13b) Tensorflow model history (previous versions).
-│       │   ├── joe_download_and_run.py   # (14) Script for downloading and running Joe's model.
-│       │   └── model.py   # (15) Script for handling model loading and inference.
-│       │
-│       ├── seg3d_backend   # (16) Backend for handling 3D segmentation.
-│           ├── __pycache__   # (17) Cached bytecode files for faster execution.
-│           ├── ls_seg3d_utils   # (18) Utilities for 3D segmentation.
-│           ├── c3d_linux   # (19) Compiled 3D segmentation binaries for Linux.
-│           ├── c3d_macos_arm   # (20) Compiled 3D segmentation binaries for MacOS ARM.
-│           ├── ls_seg3d.py   # (21) Main script for 3D segmentation.
-│       └── main.py   # (22) Main script for starting the FastAPI server.
+├── client                     # Client-side code for the application.
+│   ├── __pycache__            # Cached bytecode files for faster execution.
+│   ├── Predictions            # Directory to store prediction results.
+│   │   └── mask.npy           # Numpy file containing the prediction mask.
+│   ├── __init__.py            # Initialization file for the client module.
+│   ├── graphical.py           # Script for the GUI client using tkinter for file selection and segmentation.
+│   ├── streamlit_app.py       # Streamlit script to replace graphical.py for a web-based interface.
+│   └── segmentation_client.py # Script to handle file uploads for segmentation and prediction.
 │
-├── media   # (23) Directory for storing media files.
+├── server                     # Server-side code for the application.
+│   ├── __pycache__            # Cached bytecode files for faster execution.
+│   ├── media                  # Directory for storing media files.
+│   ├── models                 # Directory to store the ML models.
+│   │   ├── __pycache__        # Cached bytecode files for faster execution.
+│   │   ├── cv_model           # Computer vision model directory.
+│   │   │   └── MobileNetv2_model.keras # Pre-trained MobileNetV2 model file.
+│   │   ├── ls_seg3d_model     # Directory for 3D segmentation model.
+│   │   │   └── m20230623-163203wh500epochs # Pre-trained 3D segmentation model file.
+│   │   ├── __init__.py        # Initialization file for the models module.
+│   ├── __init__.py            # Initialization file for the server module.
+│   ├── main.py                # Main script for starting the FastAPI server.
+│   ├── main2.py               # Secondary main script, possibly for a different configuration or purpose.
+│   ├── models.py              # Definition of model classes with metadata and processing methods.
 │
-├── .gitignore   # (24) Git ignore file to exclude files from version control.
-├── 15_NRR-ID27468.nii   # (25) Sample NIfTI file for testing.
-├── Dockerfile   # (26) Docker configuration file for containerizing the application.
-├── EcoVizAPI_seg3d_joe_contract.docx   # (27) EcoViz API contract with rules for engagement.
-├── README.md   # (28) Readme file containing the project overview and instructions.
-├── requirements.txt   # (29) List of Python dependencies for the project.
-├── seg3DenvMini.yml   # (30) Minimal Conda environment configuration file.
-├── test.txt   # (31) Test file (purpose unclear from the name).
-└── view_mask.ipynb   # (32) Jupyter notebook for visualizing prediction masks.
-
-
+├── agnosticapi.egg-info       # Metadata directory for the agnosticapi package.
+│
+├── venv                       # Virtual environment directory.
+│
+├── .gitignore                 # Git ignore file to exclude files from version control.
+├── 15_NRR-ID27468.nii         # Sample NIfTI file for testing.
+├── Dockerfile                 # Docker configuration file for containerizing the application.
+├── EcoVizAPI_seg3d_joe_contract.docx  # EcoViz API contract with rules for engagement.
+├── pyproject.toml             # Configuration file for building and packaging the project.
+├── README.md                  # Readme file containing the project overview and instructions.
+├── requirements.txt           # List of Python dependencies for the project.
+├── seg3DenvMini.yml           # Minimal Conda environment configuration file.
+├── setup.py                   # Script for installing the agnosticapi package.
+└── view_mask.ipynb            # Jupyter notebook for visualizing prediction masks.
 ```
 
+## Installation
 
-1. **Set up your environment:** To run, you will need to set up your environment. There are three options for doing this:
-    
-1a. On Windows, we recommend Docker:
-```
+### Using Docker (Recommended for Windows)
+```bash
 docker build -t mobile-net-app .
 docker run -p 80:80 mobile-net-app
 ```
 
-1b. On Mac (with Mac chip), we recommend using `conda`. From within the AgnosticAPI directory, please run (line by line):
-```
+### Using Conda (Recommended for Mac with Mac chip)
+From within the AgnosticAPI directory, please run (line by line):
+```bash
 conda env create -n apienv python=3.8
 conda activate apienv
-```
-
-For me, this yml script was being problematic, so instead I wanted to just install the dependencies one by one, and that worked. This helped disentangle issues originating from tensorflow versus others.
-
-```
 conda env update -f seg3DenvMini.yml 
 ```
-Note: You may have to use `conda` instead of `pip` to install tensorflow (one of us experienced this on Apple M2MAX).
+Note: You may have to use `conda` instead of `pip` to install TensorFlow (one of us experienced this on Apple M2MAX).
 
-1c. If these options do not work for you, you can set up your own virtual environment with the requirements listed in `requirements.txt`.
+### Using Virtual Environment
+If Docker or Conda options do not work for you, set up your own virtual environment with the requirements listed in `requirements.txt`.
 
-2. **Start the Server:**
-    1. From inside the AgnosticAPI directory, move to the app/server/ directory and run:
-        
-        ```bash
-        python main.py
-        ```
-        
-        This command will launch the API, which should, by default, be listening on port 8000.
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+pip install -r requirements.txt
+```
 
-### Setting up the Client
-3. **Download the Required File:**
-    1. Download the file `15_NRR-ID27468` from the `RSE_API` folder.
-    **Start the Client GUI:**
-    2. Inside the AgnosticAPI directory, run:
-        
-        ```bash
-        python app/client/graphical.py
-        ```
-        
-        This will launch the graphical interface where you can specify important information. 
-        
-        First update the IP address and port that the server is listening on. This information can be found on the line ‘Uvicorn running on …’.
+## Usage
 
-        Specify the path to `15_NRR-ID27468` and hit “start segmentation”. On the server end, you should see a message indicating that the segmentation process has started and output messages indicating the cropping process.
-        
-4. **Verify the Returned Values/Labels:**
-    1. After the segmentation process is complete, the client should receive a “Segmentation completed!” message.
-    2. On the client’s system, you should see the following file: `app/Predictions/mask.npy`
-    3. To inspect some of the frames, run the Jupyter notebook file `AgnosticAPI/view_mask.ipynb`.
+### 1. Running the Server
+From inside the AgnosticAPI directory, move to the `server/` directory and run:
+
+```bash
+python main.py
+```
+
+This command will launch the API, which should, by default, be listening on port 8000.
+
+## 2. Setting up the Client
+
+### Download the Required File
+1. Download the file `15_NRR-ID27468` from the `RSE_API` folder.
+
+### Start the Client GUI
+2. Inside the AgnosticAPI directory, run:
+
+    ```bash
+    python app/client/graphical.py
+    ```
+
+    This will launch the graphical interface where you can specify important information.
+
+    - First, update the IP address and port that the server is listening on. This information can be found on the line
+
+ ‘Uvicorn running on …’.
+    - Specify the path to `15_NRR-ID27468` and hit “start segmentation”. On the server end, you should see a message indicating that the segmentation process has started and output messages indicating the cropping process.
+
+### 3. Verify the Returned Values/Labels
+3. After the segmentation process is complete, the client should receive a “Segmentation completed!” message.
+4. On the client’s system, you should see the following file: `app/Predictions/mask.npy`
+5. To inspect some of the frames, run the Jupyter notebook file `AgnosticAPI/view_mask.ipynb`.
+
+### Endpoints
+
+- **/cv (POST)**: Performs image classification on an uploaded file.
+- **/seg3d (POST)**: Performs 3D segmentation on an uploaded file.
+
+### Data Format
+
+#### /cv (POST)
+
+- **Request**:
+  - Accepts a file upload using the multipart/form-data format.
+  - The uploaded file should be an image file (e.g., jpg, png).
+  - Example:
+    ```bash
+    curl -X POST "http://localhost:8000/cv" -F "file=@path_to_image_file.jpg"
+    ```
+
+- **Response**:
+  - Returns a JSON object with the predicted class and probability.
+  - Example:
+    ```json
+    {
+      "class": 1,
+      "probability": 0.95
+    }
+    ```
+
+#### /seg3d (POST)
+
+- **Request**:
+  - Accepts a file upload using the multipart/form-data format.
+  - The uploaded file should be 3D medical data in a format supported by the library used (e.g., Nifti).
+  - Example:
+    ```bash
+    curl -X POST "http://localhost:8000/seg3d" -F "uploaded_file=@path_to_nifti_file.nii" -H "uuid: your-uuid-here"
+    ```
+
+- **Response**:
+  - Returns a raw byte stream containing the segmentation labels. The data type is uint8.
+  - Example:
+    ```json
+    {
+      "segmentation_labels": "base64_encoded_byte_stream"
+    }
+    ```
+
+### Error Handling
+
+Both endpoints return JSON responses with an "error" field containing a message string in case of any exceptions.
+
+- Example:
+  ```json
+  {
+    "error": "File not found."
+  }
+  ```
+
+### Problems/Limitations
+
+- **/seg3d (POST)**:
+  - Tiling the uploaded file and processing each tile one at a time results in a long runtime. Explore ways to use GPU/parallelize.
+  - The request needs file uploads (*.nii files) that are ~70 Mb. These are too large for Postman (5Mb limit). This file size also poses a problem for Swagger.
+
+### Loading Models Using Classes
+
+To load models using the defined classes (`CVModel` and `Seg3DModel`), follow these steps:
+
+1. **Define the Model Class**: Create a class that extends the `Model` base class for specific model types.
+2. **Initialize the Model**: Create an instance of the model class and provide the necessary parameters.
+3. **Load the Model**: Use the `load` method of the model instance to load the pre-trained model from the specified path.
+
+**Example Code for Loading Models**:
+
+```python
+from models import CVModel, Seg3DModel
+
+# Define models by creating an instance of the model class
+cv_model = CVModel(
+    name="CVModel",
+    model_type="Package or Library",
+    task="Image Classification",
+    description="MobileNetV2 image classification model",
+    ai_model_type="Convolutional Neural Network",
+    task_specific=True,
+    ecology_specific=False,
+    language="Python",
+    dependencies=["tensorflow", "numpy"],
+    tool_url="https://github.com/yourrepo/cvmodel",
+    last_update="June 26, 2024",
+    license="GNU General Public License",
+    contact_name="Your Name",
+    contact_email="your.email@example.com",
+    contact_responsiveness="Very responsive"
+)
+cv_model.load('agnosticapi/server/models/cv_model/MobileNetv2_model.keras')
+
+```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for instructions on how to contribute.
+
+## License
+
+Distributed under the terms of the [GNU General Public License](LICENSE).
+
+<!-- prettier-ignore-start -->
+[actions-badge]:            https://github.com/YourUsername/AgnosticAPI/workflows/CI/badge.svg
+[actions-link]:             https://github.com/YourUsername/AgnosticAPI/actions
+[pypi-link]:                https://pypi.org/project/agnosticapi/
+[pypi-platforms]:           https://img.shields.io/pypi/pyversions/agnosticapi
+[pypi-version]:             https://img.shields.io/pypi/v/agnosticapi
+<!-- prettier-ignore-end -->
+
+This README provides a comprehensive overview of your project, including installation instructions, usage examples, directory structure, endpoints, error handling, and client setup, in a standard AI model README format.
+    

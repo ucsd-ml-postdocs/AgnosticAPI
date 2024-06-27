@@ -5,6 +5,7 @@ from tensorflow import keras
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import tqdm
+import pickle
 from scipy.ndimage import gaussian_filter
 
 #import app.ls_seg3d_utils as ut   # use this for docker
@@ -14,6 +15,7 @@ from scipy.ndimage import gaussian_filter
 
 print("BEFORE seg3d_backend.ls_seg3d_utils")
 import agnosticapi.server.models.ls_seg3d_model.seg3d_backend.ls_seg3d_utils as ut
+from agnosticapi.server.models.ls_seg3d_model import model_files, model_history
 print("AFTER seg3d_backend.ls_seg3d_utils")
 
 def compute_gaussian(tile_size, sigma_scale, dtype=np.float32) \
@@ -33,13 +35,10 @@ def compute_gaussian(tile_size, sigma_scale, dtype=np.float32) \
 
     return gaussian_importance_map
 
-import pickle
+def predict(image_path):
 
-def ls_seg3d(image_path):
-    # path_to_data = 'app/ls_seg3D_laptop/'
-
-    model_name = 'models/ls_seg3d_model/m20230623-163203wh500epochs'
-    history_name = 'models/ls_seg3d_model/h20230623-163203wh500epochs'
+    model_name = model_files
+    history_name = model_history
 
     model = keras.models.load_model(model_name)
     with open(history_name, "rb") as file_pi:
