@@ -1,0 +1,45 @@
+# Use the official NVIDIA CUDA image as the base image
+FROM nvidia/cuda:11.2.2-cudnn8-runtime-ubuntu20.04
+
+# Set environment variables for CUDA
+ENV PATH /usr/local/cuda/bin:$PATH
+ENV LD_LIBRARY_PATH /usr/local/cuda/lib64:$LD_LIBRARY_PATH
+
+# Install Python and required system packages
+RUN apt-get update && apt-get install -y \
+    python3.8 \
+    python3-pip \
+    libhdf5-dev \
+    libhdf5-serial-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set Python 3.8 as the default
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
+
+# Upgrade pip
+RUN pip3 install --upgrade pip
+
+# Copy requirements file
+#COPY ./requirements.txt /app/requirements.txt
+
+# Install required Python packages from requirements file
+#RUN pip3 install -r /app/requirements.txt
+
+# Install additional packages
+RUN pip3 install Cython setuptools wheel h5py
+RUN pip3 install tensorflow-gpu==2.11.0
+RUN pip3 install fastapi uvicorn tqdm Pillow nibabel matplotlib scipy
+
+# Set the working directory
+WORKDIR /AgnosticAPI/app/server
+
+# Copy application code to the container
+COPY ./app/server /AgnosticAPI/app/server
+
+# Expose the port
+EXPOSE 8000
+
+# Default command to run when starting the container
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+
