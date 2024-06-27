@@ -1,6 +1,17 @@
+import os
 import streamlit as st
 import numpy as np
 from segmentation_client import upload_for_segmentation
+
+# Dynamically determine the path to the logo
+current_dir = os.path.dirname(os.path.abspath(__file__))
+logo_path = os.path.join(current_dir, '..', '..', 'media', 'DALLE_JKB_logo.png')
+
+# Verify the path
+if not os.path.isfile(logo_path):
+    st.error(f"Logo file not found at {logo_path}")
+else:
+    st.image(logo_path, width=300)  # Adjust the width as needed
 
 # Function to handle file selection and initiate segmentation
 def start_segmentation(file, server_url):
