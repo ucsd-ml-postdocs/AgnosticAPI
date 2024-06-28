@@ -2,9 +2,8 @@ import numpy as np
 import nibabel as nib
 import tensorflow as tf
 import shutil
-from agnosticapi.server.models.cv_model import predict as cv_predict
-from agnosticapi.server.models.seg3d_model import predict as seg3d_predict
-
+from agnosticapi.server.models.cv_model.predict import cv_predict
+from agnosticapi.server.models.seg3d_model.predict import seg3d_predict
 
 class Model:
     def __init__(self, name, model_type, model_files, endpoint, task, description, ai_model_type, task_specific, ecology_specific,
@@ -69,35 +68,25 @@ class Seg3DModel(Model):
             shutil.copyfileobj(uploaded_file.file, file)
         if path.endswith('.nii'):
             return path
-        elif path.endswith('.npz'):
+        elif path.endswith('.npy'):
             npz_data = np.load(path)
             nifti_img = nib.Nifti1Image(npz_data['arr_0'], np.eye(4))
-            nifti_path = path.replace('.npz', '.nii')
+            nifti_path = path.replace('.npy', '.nii')
             nib.save(nifti_img, nifti_path)
             return nifti_path
         else:
             raise ValueError("Unsupported file format. Please provide a .nii or .npz file.")
 
-    def predict(self, model_path, file_path, uuid):
+    def predict(self, model_path, file_path):
         print('Trying to predict...')
         preprocessed_file_path = self.preprocess(file_path)
         labels = seg3d_predict(model_path, preprocessed_file_path)
-        
         npy_path, nii_path = self.postprocess(labels, preprocessed_file_path.replace('.nii', '.npz'), preprocessed_file_path)
-        
-        with open(npy_path, 'rb') as f:
-            data = f.read()
-        
-        response = StreamingResponse(io.BytesIO(data), media_type='application/octet-stream')
-        response.headers['X-Response-UUID'] = str(uuid)
-        response.headers['Content-Disposition'] = f'attachment; filename={os.path.basename(npy_path)}'
-        
-        os.system("rm -r " + preprocessed_file_path)
-        return response
+        return npy_path, nii_path
 
     def postprocess(self, output, output_path_npy, output_path_nii):
         # Save as .nii
         nib.save(nib.Nifti1Image(output, np.eye(4)), output_path_nii)
-        # Save as .npz
+        # Save as .npy
         np.savez(output_path_npy, output)
         return output_path_npy, output_path_nii

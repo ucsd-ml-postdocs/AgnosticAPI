@@ -6,6 +6,8 @@ from agnosticapi.server.models.seg3d_model import model_files as seg3d_model_fil
 
 import numpy as np
 import uvicorn
+import io
+import os
 
 app = FastAPI()
 
@@ -58,12 +60,20 @@ async def prediction(model_path: str = Form(...), file: UploadFile = File(...)):
         result = cv_model.postprocess(predictions)
         return result
     except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
+        return {"error": str(e)}
 
 @app.post("/seg3d")
 async def seg3dtest(model_path: str = Form(...), uploaded_file: UploadFile = File(...), uuid: str = Header(None)):
     try:
-        response = seg3d_model.predict(model_path, uploaded_file, uuid)
+        npy_path, nii_path = seg3d_model.predict(model_path, uploaded_file)
+
+        with open(npy_path, 'rb') as f:
+            data = f.read()
+
+        response = StreamingResponse(io.BytesIO(data), media_type='application/octet-stream')
+        response.headers['X-Response-UUID'] = str(uuid)
+        response.headers['Content-Disposition'] = f'attachment; filename={os.path.basename(npy_path)}'
+
         return response
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})

@@ -23,7 +23,7 @@ def compute_gaussian(tile_size, sigma_scale, dtype=np.float32) -> np.ndarray:
 
     return gaussian_importance_map
 
-def predict(model_path, image_path):
+def seg3d_predict(model_path, image_path):
     model = keras.models.load_model(model_path)
     with open(model_history, "rb") as file_pi:
         history = pickle.load(file_pi)

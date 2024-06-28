@@ -3,7 +3,7 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 
-def predict(model_path, img):
+def cv_predict(model_path, img):
     # Load the MobileNetV2 model from the provided model path
     model = load_model(model_path)
 

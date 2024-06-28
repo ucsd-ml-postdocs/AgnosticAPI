@@ -17,7 +17,7 @@ RUN pip3 install --upgrade pip
 
 # Install required Python packages
 RUN pip3 install tensorflow==2.12
-RUN pip3 install fastapi uvicorn tqdm Pillow nibabel matplotlib streamlit watchdog
+RUN pip3 install fastapi uvicorn tqdm Pillow nibabel matplotlib streamlit watchdog pytest
 
 # Set the working directory
 #WORKDIR /app

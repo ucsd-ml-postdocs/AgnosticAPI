@@ -1,16 +1,13 @@
-# python script to resample a single 3D volume
-
 import os
 import sys
+from agnosticapi.server.models.seg3d_model import model_files, model_history, root_dir
 
 '''
 @:return the tmp c3d output file path 
 '''
 def resample_single_volume(path):
-
     interp = '-interpolation Cubic'
     resamp = '-resample-mm 1.0x1.0x1.0mm'
-    
     
     input_file = path
     output_folder = 'tmp/c3d_out/img-nii-1.0/'
@@ -28,9 +25,9 @@ def resample_single_volume(path):
     system = sys.platform
     print("Current working directory EXE: ", os.getcwd(), system)
     if system == 'linux':
-        command = './models/ls_seg3d_model/seg3d_backend/c3d_linux'+' '+input_file+' '+interp+' '+resamp+' '+output_file
+        command = str(root_dir) + '/seg3d_backend/c3d_linux' + ' ' + input_file + ' ' + interp + ' ' + resamp + ' ' + output_file
     elif system == 'darwin':
-        command = './models/ls_seg3d_model/seg3d_backend/c3d_macos_arm' + ' ' + input_file + ' ' + interp + ' ' + resamp + ' ' + output_file
+        command = str(root_dir) + '/seg3d_backend/c3d_macos_arm' + ' ' + input_file + ' ' + interp + ' ' + resamp + ' ' + output_file
     
     ret = os.system(command)
     # print(f"command: {command}")
@@ -40,5 +37,3 @@ def resample_single_volume(path):
         return output_file
     else:
         raise SystemError('c3d resampled failed!')
-    
- 

@@ -5,6 +5,7 @@ Predictions/*
 __pycache__/
 agnosticapi/client/__pycache__/*
 agnosticapi/server/__pycache__/*
+agnosticapi/test-outputs/*
 
 */.ipynb_checkpoints/
 
