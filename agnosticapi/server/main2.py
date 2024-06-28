@@ -1,17 +1,20 @@
-from fastapi import FastAPI, File, UploadFile, Header, HTTPException
-from fastapi.responses import StreamingResponse
-from agnosticapi.server.models import CVModel, Seg3DModel  # Import the model classes
+from fastapi import FastAPI, File, UploadFile, Header, HTTPException, Form
+from fastapi.responses import StreamingResponse, JSONResponse
+from agnosticapi.server.model_definitions import CVModel, Seg3DModel
+from agnosticapi.server.models.cv_model import model_files as cv_model_files, model_history as cv_model_history, code_dir as cv_code_dir
+from agnosticapi.server.models.seg3d_model import model_files as seg3d_model_files, model_history as seg3d_model_history, code_dir as seg3d_code_dir
+
 import numpy as np
-import shutil
-import io
-import os
+import uvicorn
 
 app = FastAPI()
 
-# Define models
+# Initialize and load models
 cv_model = CVModel(
     name="CVModel",
     model_type="Package or Library",
+    model_files=cv_model_files,
+    endpoint="/cv",
     task="Image Classification",
     description="MobileNetV2 image classification model",
     ai_model_type="Convolutional Neural Network",
@@ -26,11 +29,12 @@ cv_model = CVModel(
     contact_email="your.email@example.com",
     contact_responsiveness="Very responsive"
 )
-cv_model.load('agnosticapi/server/models/cv_model/MobileNetv2_model.keras')
 
-Seg3D_model_V1 = Seg3DModel(
+seg3d_model = Seg3DModel(
     name="Seg3DModelV1",
     model_type="Package or Library",
+    model_files=seg3d_model_files,
+    endpoint="/seg3d",
     task="Image Segmentation",
     description="3D segmentation model to segment medical imagery of the heart.",
     ai_model_type="Convolutional Neural Network",
@@ -45,37 +49,24 @@ Seg3D_model_V1 = Seg3DModel(
     contact_email="your.email@example.com",
     contact_responsiveness="Very responsive"
 )
-from agnosticapi.server.models.ls_seg3d_model import model_files
-Seg3D_model_V1.load(model_files)
-
 
 @app.post("/cv")
-async def prediction(file: UploadFile = File(...)):
+async def prediction(model_path: str = Form(...), file: UploadFile = File(...)):
     try:
         image_bytes = await file.read()
-        predictions = cv_model.predict(image_bytes)
-        predicted_class, probability = predictions[0].argmax(), predictions[0].max()
-        return {"class": int(predicted_class), "probability": float(probability)}
+        predictions = cv_model.predict(model_path, image_bytes)
+        result = cv_model.postprocess(predictions)
+        return result
     except Exception as e:
-        return {"error": str(e)}
+        return JSONResponse(status_code=500, content={"error": str(e)})
 
 @app.post("/seg3d")
-async def seg3dtest(uploaded_file: UploadFile = File(...), uuid: str = Header(None)):
+async def seg3dtest(model_path: str = Form(...), uploaded_file: UploadFile = File(...), uuid: str = Header(None)):
     try:
-        path = f"{uploaded_file.filename}"
-        with open(path, 'w+b') as file:
-            shutil.copyfileobj(uploaded_file.file, file)
-        labels = Seg3D_model_V1.predict(path)
-        labels = labels.astype(np.uint8)
-        data = io.BytesIO(labels.tobytes())
-        response = StreamingResponse(data, media_type='application/octet-stream')
-        response.headers['X-Response-UUID'] = str(uuid)
-        os.system("rm -r " + path)
+        response = seg3d_model.predict(model_path, uploaded_file, uuid)
         return response
     except Exception as e:
-        if os.path.exists(path):
-            os.remove(path)
-        return {"error": str(e)}
+        return JSONResponse(status_code=500, content={"error": str(e)})
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

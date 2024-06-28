@@ -8,3 +8,4 @@ pillow
 nibabel
 matplotlib
 streamlit
+watchdog

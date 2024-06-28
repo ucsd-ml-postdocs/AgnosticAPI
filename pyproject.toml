@@ -23,6 +23,7 @@ dependencies = [
   "pillow",
   "nibabel",
   "streamlit",
+  "watchdog",
 ]
 
 [tool_setuptools.packages.find] # finds submodules

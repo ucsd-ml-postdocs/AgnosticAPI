@@ -15,7 +15,7 @@ import sys
 import json
 import uuid  # Import UUID library
 
-import agnosticapi.server.models.ls_seg3d_model.predict as predict
+import agnosticapi.server.models.seg3d_model.predict as predict
 print("MADE IT HERE")
 #import ls_seg3d
 
