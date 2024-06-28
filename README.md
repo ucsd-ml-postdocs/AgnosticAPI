@@ -1,10 +1,9 @@
 # AgnosticAPI
 
-[![Actions Status][actions-badge]][actions-link]
 [![PyPI version][pypi-version]][pypi-link]
 [![PyPI platforms][pypi-platforms]][pypi-link]
 
-A tool for performing image classification and 3D segmentation using pre-trained AI models.
+A (forthcoming Python package) and tool for performing image classification and 3D segmentation using pre-trained AI models.
 
 ## Directory Structure
 
