@@ -49,7 +49,7 @@ def test_seg3d_model_predict(seg3d_model, uploaded_file):
     assert os.path.exists(npy_path)
     assert os.path.exists(nii_path)
 
-def test_seg3d_model_postprocess(seg3d_model):
+def test_seg3d_model_postprocess(seg3d_model): # TODO change the output to tmp_path and check if it exists and maybe do mask ipynb viz
     output = np.random.rand(200, 200, 160)
     output_path_npy = "agnosticapi/test-outputs/output_path.npz"
     output_path_nii = "agnosticapi/test-outputs/output_path.nii"

@@ -21,15 +21,17 @@ def resample_single_volume(path):
     # print(os.getcwd())
     # print(os.listdir())
     
+   
     #### Joe added code -- MAY NEED TO MODIFY
     system = sys.platform
     print("Current working directory EXE: ", os.getcwd(), system)
     if system == 'linux':
-        command = str(root_dir) + '/seg3d_backend/c3d_linux' + ' ' + input_file + ' ' + interp + ' ' + resamp + ' ' + output_file
+        command = '.' + str(root_dir) + '/seg3d_backend/c3d_linux' + ' ' + input_file + ' ' + interp + ' ' + resamp + ' ' + output_file
     elif system == 'darwin':
-        command = str(root_dir) + '/seg3d_backend/c3d_macos_arm' + ' ' + input_file + ' ' + interp + ' ' + resamp + ' ' + output_file
-    
+        command = '.' + str(root_dir) + '/seg3d_backend/c3d_macos_arm' + ' ' + input_file + ' ' + interp + ' ' + resamp + ' ' + output_file
+   
     ret = os.system(command)
+    #import pdb; pdb.set_trace()
     # print(f"command: {command}")
     # print(os.listdir())
     if ret == 0:

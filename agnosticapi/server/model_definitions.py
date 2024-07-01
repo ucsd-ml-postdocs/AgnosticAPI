@@ -47,6 +47,7 @@ class Model:
         np.save(output_path, output)
 
 class CVModel(Model):
+
     def preprocess(self, file):
         img = np.uint8(tf.image.resize(tf.io.decode_image(file), (224, 224),
                                        method=tf.image.ResizeMethod.BILINEAR))

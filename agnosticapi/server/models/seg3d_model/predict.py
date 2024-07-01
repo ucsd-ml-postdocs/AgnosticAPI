@@ -29,9 +29,13 @@ def seg3d_predict(model_path, image_path):
         history = pickle.load(file_pi)
 
     gaussian_window = compute_gaussian([128, 128, 96], 1. / 8)
+    print(gaussian_window.shape)
+    print(gaussian_window.dtype)
+    
     gauss_window_multiplier = np.repeat(gaussian_window[:, :, :, np.newaxis], 10, axis=3)
     
-    resampled_image_path = ut.resample_single_volume(image_path)
+    # resampled_image_path = ut.resample_single_volume(image_path)
+    resampled_image_path = image_path
     
     # load and normalize image
     nii_img = nib.load(resampled_image_path)
@@ -57,7 +61,7 @@ def seg3d_predict(model_path, image_path):
     for i1 in range(0, img_crop.shape[0] - 127, patch_step_d1):
         for i2 in range(0, img_crop.shape[1] - 127, patch_step_d2):
             for i3 in range(0, img_crop.shape[2] - 95, patch_step_d3):
-                patch = img_crop[i1:i1 + 128, i2:i2 + 128, i3:i3 + 96]
+                patch = img_crop[i1:i1 + 128, i2+i2 + 128, i3 + 96]
                 x = np.expand_dims(patch, 0)
                 x = np.expand_dims(x, 4)
                 logits = model.predict(x, verbose=0)
@@ -72,8 +76,14 @@ def seg3d_predict(model_path, image_path):
 
     img_pred_norm = img_pred / norm_array
     labels = tf.argmax(img_pred_norm, axis=-1)
-    prob = ut.crop_or_pad(prob, tuple(np.concatenate((orig_size, [10]))), value=(-1024 - mean) / std)
     labels = ut.crop_or_pad(labels, orig_size)
 
+    prob = img_pred_norm
+    prob = ut.crop_or_pad(prob, tuple(np.concatenate((orig_size, [10]))), value=(-1024 - mean) / std)
+    
+    labels_nii = nib.Nifti1Image(labels, nii_img.affine, nii_img.header)
+
+    print('Saved prediction shape: (' + str(labels.shape[0]) + ',' + str(labels.shape[1]) + ',' + str(labels.shape[2]) + ')')
+    
     os.system('rm -r tmp')
     return labels
